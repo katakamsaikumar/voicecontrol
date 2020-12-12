@@ -1,0 +1,113 @@
+from gtts import gTTS
+from pygame import mixer
+import pyautogui as pag
+import os
+import speech_recognition as sr
+import datetime
+l=['.mp3','.mkv','.mp4','.txt','.doc','.docx','.wks','.exe','.py','.zip','.pkg','.arj','.z','.bin','.sql','.log','.xml','.com','.apk','.cgi','.jpg','.png','.jpeg','.gif','.pdf','.css','.html','.jsp','.js','.php','.ppt','.pps','.pptx','.c','.cpp','.cs','.h','.java']
+pag.hotkey('winleft','down')
+pag.hotkey('winleft','down')
+def voice_to_text():
+    global j
+    r=sr.Recognizer()
+    with sr.Microphone() as source:
+        audio=r.listen(source) 
+        try:
+            text=r.recognize_google(audio)
+            print(text)
+            j=text
+        except:
+            mixer.init()
+            mixer.music.load('please try again.mp3')
+            mixer.music.play()
+            voice_to_text()
+        return j
+#pag.press("f5")
+for i in range(4):
+    pag.press("tab")
+while(True):
+    v=voice_to_text()
+    v=v.lower()
+    a=v.split(' ')
+    if(a[0]=='open' or a[0]=='go'):
+        if(a[0]=='open'):
+            a.remove('open')
+        else:
+            a.remove('go')
+            a.remove('to')
+        if('drive' in a):
+            c=''
+            c=c+a[0]+":"
+            os.startfile(c)
+            while(True):
+                v=voice_to_text()
+                v.lower()
+                a=v.split(' ')
+                if(a[0]=='open' or (a[0]=='go' and a[1]=='to')):
+                    if(a[0]=='open'):
+                        a.remove('open')
+                    else:
+                        a.remove('go')
+                        a.remove('to')
+                    pag.hotkey('alt','f4')
+                    k=' '.join(a)
+                    c=c+"\\\\"+k
+                    print(c)
+                    try:
+                        os.startfile(c)
+                    except FileNotFoundError:
+                        for i in l:
+                            try:
+                                os.startfile(c+i)
+                                break
+                            except FileNotFoundError:
+                                print("file not found")
+                    d=c.split(sep='\\')
+                if(a[0]=='go' and a[1]!='to'):
+                    a.remove("go")
+                    #d=c.split(sep='\\')
+                    print(d)
+                    
+                    if(a[0]=='back'):
+                        e=d
+                        print(e)
+                        d.pop()
+                        d.pop()
+                        print(d)
+                        pag.hotkey("alt","f4")
+                        os.startfile("\\".join(d))
+                    if(a[0]=='forward'):
+                        pag.hotkey("alt","f4")
+                        os.startfile("\\".join(e))
+                if(v=='exit'):
+                    pag.hotkey("alt","f4")
+                    break
+        else:
+            pag.press("winleft")
+            pag.typewrite(" ".join(a))
+            time.sleep(0.7)              
+            pag.press("enter")
+    elif(a[0]=='down'):
+        pag.press('down')
+    elif(a[0]=='up'):
+        pag.press('up')
+    elif(a[0]=='left'):
+        pag.press("left")
+    elif(a[0]=='right'):
+        pag.press('right')
+    elif(a[0]=="ok"):
+        pag.press("enter")
+    elif(a[0]=='tab'):
+        pag.press('tab')
+    elif(a[0]=='minimize'):
+        pag.hotkey('winleft','down')
+    elif(a[0]=="exit"):
+        break
+    else:
+        mixer.init()
+        mixer.music.load("not available.mp3")
+        mixer.music.play()
+                
+        
+    
+
